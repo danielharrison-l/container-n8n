@@ -6,21 +6,33 @@ ENV GENERIC_TIMEZONE="America/Sao_Paulo"
 ENV N8N_HOST="0.0.0.0"
 ENV N8N_PORT="5678"
 ENV N8N_PROTOCOL="https"
+ENV WEBHOOK_URL="https://container-n8n.onrender.com"
 
-# Create the n8n directory
+# Switch to root to install curl
 USER root
-RUN mkdir -p /home/node/.n8n
-RUN chown -R node:node /home/node/.n8n
 
+# Install curl for health check
+RUN apk add --no-cache curl
+
+# Ensure the n8n directory exists and has correct permissions
+RUN mkdir -p /home/node/.n8n && \
+  chown -R node:node /home/node/.n8n
+
+# Copy n8n data (skip if doesn't exist)
+COPY --chown=node:node ./n8n/ /home/node/.n8n/ 2>/dev/null || true
+
+# Switch back to node user
 USER node
 
-WORKDIR /home/node/.n8n
+# Set working directory
+WORKDIR /home/node
 
-COPY --chown=node:node ./n8n/ /home/node/.n8n/
-
+# Expose port
 EXPOSE 5678
 
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:5678/healthz || exit 1
 
-CMD ["n8n", "start"]
+# Start n8n
+CMD ["node", "/usr/local/lib/node_modules/n8n/bin/n8n"]

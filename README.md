@@ -25,11 +25,12 @@ Este projeto roda o n8n (ferramenta de automação de workflow) no Render.
    - Clique em "New +" → "Web Service"
    - Conecte seu repositório
    - Configure:
-     - **Name**: n8n-app (ou nome de sua escolha)
+     - **Name**: container-n8n (ou nome de sua escolha)
      - **Environment**: Docker
      - **Region**: Oregon (ou mais próxima)
      - **Branch**: main
-     - **Dockerfile Path**: ./Dockerfile
+     - **Docker Command**: `n8n start`
+     - **Port**: 5678
 
 3. **Configurar Variáveis de Ambiente**
    - Na seção "Environment Variables":
@@ -37,7 +38,7 @@ Este projeto roda o n8n (ferramenta de automação de workflow) no Render.
      - `N8N_HOST`: 0.0.0.0
      - `N8N_PORT`: 5678
      - `N8N_PROTOCOL`: https
-     - `WEBHOOK_URL`: https://seu-app.onrender.com/
+     - `WEBHOOK_URL`: https://container-n8n.onrender.com
 
 4. **Configurar Health Check (Opcional)**
    - Health Check Path: `/healthz`
