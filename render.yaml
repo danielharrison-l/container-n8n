@@ -1,0 +1,22 @@
+# Render deploy configuration
+# https://render.com/docs/yaml-spec
+
+services:
+  - type: web
+    name: n8n-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: GENERIC_TIMEZONE
+        value: America/Sao_Paulo
+      - key: N8N_HOST
+        value: 0.0.0.0
+      - key: N8N_PORT
+        value: 5678
+      - key: N8N_PROTOCOL
+        value: https
+      - key: WEBHOOK_URL
+        value: https://n8n-app.onrender.com
+    healthCheckPath: /healthz
