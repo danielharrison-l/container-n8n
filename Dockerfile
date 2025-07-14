@@ -18,9 +18,6 @@ RUN apk add --no-cache curl
 RUN mkdir -p /home/node/.n8n && \
   chown -R node:node /home/node/.n8n
 
-# Copy n8n data (skip if doesn't exist)
-COPY --chown=node:node ./n8n/ /home/node/.n8n/ 2>/dev/null || true
-
 # Switch back to node user
 USER node
 
@@ -35,4 +32,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:5678/healthz || exit 1
 
 # Start n8n
-CMD ["node", "/usr/local/lib/node_modules/n8n/bin/n8n"]
+CMD ["n8n", "start"]
